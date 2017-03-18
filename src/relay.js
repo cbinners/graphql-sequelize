@@ -233,9 +233,15 @@ export function sequelizeConnection({
       });
       let orderDirection = orderByDirection(orderBy[0][1], args);
 
-      options.order = [
-        [orderAttribute, orderDirection]
-      ];
+      if (Array.isArray(orderAttribute)) {
+        options.order = [
+          orderAttribute.concat([orderDirection])
+        ];
+      } else {
+        options.order = [
+          [orderAttribute, orderDirection]
+        ];
+      }
 
       if (orderAttribute !== model.primaryKeyAttribute) {
         options.order.push([model.primaryKeyAttribute, orderByDirection('ASC', args)]);
